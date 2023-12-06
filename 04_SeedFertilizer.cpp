@@ -1,5 +1,140 @@
-seeds: 2149186375 163827995 1217693442 67424215 365381741 74637275 1627905362 77016740 22956580 60539394 586585112 391263016 2740196667 355728559 2326609724 132259842 2479354214 184627854 3683286274 337630529
+// https://adventofcode.com/2023/day/5
 
+#include <bits/stdc++.h>
+using namespace std ;
+
+class Solution {
+    // 31599214
+    // 20358599
+public: 
+
+    void traverse(vector<vector<vector<long long>>> &mp) {
+        for(int i = 0; i < 7; ++i) {
+            for(auto &it: mp[i]) {
+                for(auto &jt: it) {
+                    cout << jt << " ";
+                }
+                cout << "\n";
+            }
+            cout << "\n\n";
+        }
+    }
+
+    int getMinSeedLocation(vector<long long> &seeds, vector<vector<vector<long long>>> &mp){
+
+        cout << seeds.size() << endl;
+
+        for(auto &it: mp){
+            sort(it.begin(), it.end(), [](vector<long long> v1, vector<long long> v2){return v1[1] < v2[1];});
+        }
+
+        // traverse(mp);
+
+        long long ans = 9223372036854775807;
+        vector<long long> locations;
+
+        for(auto &it: seeds) {
+            int ind = it;
+
+            int count = 0;
+
+            for(auto &jt: mp) {
+                for(auto &kt: jt){
+                    if (ind >= kt[1] && ind < kt[1]+kt[2]){
+                        
+                        cout << count << " " << ind << " ";
+                        ind = (kt[0] + (ind - kt[1]));
+                        cout << " " << ind << "\n";
+                        ++count;
+                        break;
+                    }
+                }
+            }
+
+            locations.emplace_back(ind);
+        }
+        
+        for(auto &it: locations){
+            ans = min(ans, it);
+        }
+
+        return ans;
+    }
+};
+
+int main () {
+    string s;
+
+    vector<long long> seeds;
+    vector<vector<vector<long long>>> mp(7);
+
+    int index = -1;
+
+    bool flag = false;
+    while(true) {
+        cin >> s;
+        if (s == "#") break;
+
+        if (flag) cin >> s;
+
+        if (index == 7) {
+            cout << "Index == 7\n"; 
+            break;
+        }
+
+        string num;
+        int count = 0;
+        while(true){
+            cin >> num;
+            if (num == "!") {
+                flag = true;
+                ++index;
+                break;
+            }
+
+            if (flag) {
+                int row = count / 3;
+
+                if (mp[index].size() == row){
+                    mp[index].push_back(vector<long long>(1, stoll(num)));
+                }
+                else {
+                    mp[index][row].emplace_back(stoll(num));
+                }
+            }
+            else {
+                seeds.emplace_back(stoll(num));
+            }
+            ++count;
+        }
+    }
+
+    // print input;
+    // for(auto &it: seeds) cout << it << " ";
+    // cout << "\n\n";
+
+    // for(int i = 0; i < 7; ++i) {
+    //     for(auto &it: mp[i]) {
+    //         for(auto &jt: it) {
+    //             cout << jt << " ";
+    //         }
+    //         cout << "\n";
+    //     }
+    //     cout << "\n\n";
+    // }
+
+    Solution Obj;
+    cout << Obj.getMinSeedLocation(seeds, mp);
+
+    return 0;
+}
+
+// TestCase 
+
+/* 
+
+seeds: 2149186375 163827995 1217693442 67424215 365381741 74637275 1627905362 77016740 22956580 60539394 586585112 391263016 2740196667 355728559 2326609724 132259842 2479354214 184627854 3683286274 337630529
+!
 seed-to-soil map:
 3229936931 3770233758 236381937
 3646926122 3757559297 12674461
@@ -26,7 +161,7 @@ seed-to-soil map:
 138466492 1033201795 147871565
 3659600583 3405756020 160385753
 2384545228 2098503058 131299414
-
+!
 soil-to-fertilizer map:
 2991238558 2151391892 144378737
 1183223769 2295770629 113964757
@@ -37,7 +172,7 @@ soil-to-fertilizer map:
 4282117858 2138542454 12849438
 3619537324 1475961920 662580534
 2824090222 2893655415 167148336
-
+! 
 fertilizer-to-water map:
 1781174267 3172095614 252304554
 1777350394 205858418 3823873
@@ -72,7 +207,7 @@ fertilizer-to-water map:
 4189989459 3480923435 104977837
 1550727921 132529147 25920288
 561759923 398797999 64589741
-
+!
 water-to-light map:
 3089483450 929490911 132962403
 2505150397 1675046001 88332095
@@ -120,7 +255,7 @@ water-to-light map:
 2593482492 414518954 65523411
 4145913726 3753079996 63826969
 998562565 217984729 142613046
-
+!
 light-to-temperature map:
 1941760763 1585007922 25353840
 4031153040 1610361762 71241272
@@ -157,7 +292,7 @@ light-to-temperature map:
 2894928213 2244169358 519295082
 2626161330 1983393047 74064354
 0 26087247 26320902
-
+!
 temperature-to-humidity map:
 2565293924 3936499516 66436363
 3537039881 3587821379 320595386
@@ -179,7 +314,7 @@ temperature-to-humidity map:
 0 1936330284 105741069
 105741069 675597386 295512894
 3293766468 3400967366 46735198
-
+!
 humidity-to-location map:
 2165947883 243164825 185957029
 4117181009 1886348582 84328450
@@ -224,3 +359,6 @@ humidity-to-location map:
 3124768961 3581093381 213781997
 511735481 1481246364 58101507
 2624588397 1382165537 99080827
+!
+#
+*/
