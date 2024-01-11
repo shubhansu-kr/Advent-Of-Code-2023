@@ -1,18 +1,64 @@
-import collections
-lines = [i for i in open('input.txt').read().split('\n') if i.strip()]
-def hand(h,part1):
-    if part1: h = h.replace('J', 'X')
-    h2 = ['J23456789TXQKA'.index(i)for i in h]
-    ts = []
-    for r in '23456789TQKA':
-        c = collections.Counter(h.replace('J', r))
-        p = tuple(sorted(c.values()))
-        t = [(1,1,1,1,1),(1,1,1,2),(1,2,2),(1,1,3),(2,3),(1,4),(5,)].index(p)
-        ts.append(t)
-    return (max(ts), *h2)
-for part1 in (True, False):
-    h = sorted((hand(h,part1), int(b)) for h, b in (l.split() for l in lines))
-    t = 0
-    for i,(_,b) in enumerate(h):
-        t+=i*b+b
-    print('Part', 2-part1, ':', t)
+import time
+import requests
+
+# Function to fetch a random quote from the QuotationsPage API
+def get_random_quote():
+    response = requests.get("https://api.quotationspage.com/quote/{}".format(time.time()))
+    quote_data = response.json()
+    return quote_data["quote"]
+
+# Set the total duration to run the program (5 minutes)
+total_duration = 5 * 60  # 5 minutes in seconds
+
+# Start time
+start_time = time.time()
+
+# Run the loop for 5 minutes
+while time.time() - start_time < total_duration:
+    # Fetch and print a random quote
+    quote = get_random_quote()
+    print("Quote:", quote)
+
+    # Wait for 2 seconds before fetching the next quote
+    time.sleep(2)
+
+
+
+# import requests
+# import pyautogui as py
+# import time
+
+# py.hotkey('alt', 'tab')
+
+# # Adding a delay after switching to the application
+# time.sleep(2)
+
+# with open("input.txt", "r") as file:
+#     for line in file:
+#         time.sleep(5)
+#         py.typewrite(line.strip())  # Corrected the function and removed newline characters
+#         py.press("enter")
+        
+
+# print("hello")
+
+# py.hotkey('alt', 'tab')
+
+# # Adding a delay after switching to the application
+# time.sleep(2)
+
+# for i in range(10000):
+    
+# 	# Fetch birthday-related quotes from the Quotable API
+# 	response = requests.get("https://api.quotable.io/random")
+# 	quote_data = response.json()
+# 	quote_text = quote_data["content"]
+
+# 	# Type the birthday quote
+# 	time.sleep(5)
+# 	py.typewrite(quote_text)
+
+# 	# Press Enter
+# 	py.press("enter")
+
+# 	print("Birthday Quote typed:", quote_text)
