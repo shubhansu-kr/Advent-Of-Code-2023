@@ -26,4 +26,4 @@ Each file has 5 parts:
 4. Main part of the code
 5. Testcase: The given sample for the puzzle in comments.
 
-I Will try to complete the Advent of Code 2024. See You Next Year.
+I Will try to complete the Advent of Code 2024. See You Next Year. 
